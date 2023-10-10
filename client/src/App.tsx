@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useContext, useEffect } from "react";
+import { Card, Header, ICardProps, RadioTabs } from "./components";
+import { bodyStyle, containerStyle, sectionTitleStyle } from "./styles";
+import { DataContext } from "./context/data-provider";
+import { useTopStories } from "./hooks/use-top-stories";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { storyType, setStoryType, topStories, isLoading, error } = useContext(DataContext);
+
+
+  const renderList = () => {
+    debugger;
+    if (topStories) {
+      return (
+        topStories?.results.length > 0 &&
+        topStories.results.map(
+          ({
+            title,
+            abstract,
+            byline,
+            created_date,
+            multimedia,
+            url,
+          }: ICardProps) =>
+            title !== "" && (
+              <Card
+                title={title}
+                abstract={abstract}
+                byline={byline}
+                url={url}
+                createdDate={created_date}
+                multimedia={multimedia}
+              />
+            )
+        )
+      );
+    }
+
+    return null;
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className={bodyStyle}>
+      <Header />
+      <RadioTabs
+        defaultType={storyType}
+        onChange={(val) => setStoryType(val)}
+      />
+      <div className={containerStyle}>
+        {isLoading ? (
+          <div>Fetching Data...</div>
+        ) : (
+          <>
+            {error ? (
+              <div>Error: {error}</div>
+            ) : (
+              <>
+                <h2 className={sectionTitleStyle}>{topStories?.section ?? ""}</h2>
+                {renderList()}
+              </>
+            )}
+          </>
+        )}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
