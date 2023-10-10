@@ -1,0 +1,24 @@
+{
+  "name": "top-stories",
+  "version": "1.0.0",
+  "description": "Top Stories from NewYork Times API.",
+  "scripts": {
+    "commit": "git add . && npx cz"
+  },
+  "keywords": [],
+  "author": "Liaqat Saeed",
+  "license": "ISC",
+  "devDependencies": {
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "engines": {
+    "npm": "8.1.0",
+    "node": "v17.0.0"
+  }
+}
